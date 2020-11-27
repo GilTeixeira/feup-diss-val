@@ -2,6 +2,7 @@
 
 ## VARS
 PATH_TO_PROJECT_FOLDER="/home/gildt/Desktop/feup-diss/MetricsCalculators/test/cpp"
+#PATH_TO_PROJECT_FOLDER="/home/gildt/Desktop/feup-diss/MetricsCalculators/test/java/src/main/java"
 PATH_TO_PROJECT_CLASSES_FILES="/home/gildt/Desktop/feup-diss/MetricsCalculators/test/java/build/classes/java/main/store/*.class"
 LANGUAGE="cpp"
 TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S`
@@ -26,11 +27,15 @@ PATH_TO_LARA_METRICS_INTERFACE="/home/gildt/Desktop/feup-diss/lara/Interface.lar
 echo $PATH_RESULTS_LARA
 
 ## TODO
-clava $PATH_TO_LARA_METRICS_INTERFACE -p $PATH_TO_PROJECT_FOLDER -ncg -cl -o $PATH_RESULTS_LARA -thd 4 -s -nci -pi -of woven
+#clava $PATH_TO_LARA_METRICS_INTERFACE -p $PATH_TO_PROJECT_FOLDER -ncg -cl -o $PATH_RESULTS_LARA -thd 4 -s -nci -pi -of woven
+java -jar ./lara/clava/Clava.jar $PATH_TO_LARA_METRICS_INTERFACE -p $PATH_TO_PROJECT_FOLDER -ncg -cl -o $PATH_RESULTS_LARA -thd 4 -s -nci -pi -of woven
+#java -jar ./lara/kadabra/kadabra.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PATH_TO_PROJECT_FOLDER -WC -o $PATH_TO_PROJECT_FOLDER -s -X
 mv full_results.txt $PATH_RESULTS_LARA
 
 # Parse results
 TOOL=$PATH_RESULTS_LARA npm start --prefix ./parser/
+
+
 
 
 ## Run CKJM
