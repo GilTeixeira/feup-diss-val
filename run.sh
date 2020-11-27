@@ -2,6 +2,7 @@
 
 ## VARS
 PATH_TO_PROJECT_FOLDER="/home/gildt/Desktop/feup-diss/MetricsCalculators/test/cpp"
+PATH_TO_PROJECT_CLASSES_FILES="/home/gildt/Desktop/feup-diss/MetricsCalculators/test/java/build/classes/java/main/store/*.class"
 LANGUAGE="cpp"
 TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S`
 
@@ -30,3 +31,11 @@ mv full_results.txt $PATH_RESULTS_LARA
 
 # Parse results
 TOOL=$PATH_RESULTS_LARA npm start --prefix ./parser/
+
+
+## Run CKJM
+mkdir results/$TIMESTAMP/ckjm
+PATH_RESULTS_CKJM=$(pwd)/results/$TIMESTAMP/ckjm/
+java -jar ./ckjm/build/ckjm-1.9.jar $PATH_TO_PROJECT_CLASSES_FILES
+mv time_results.txt $PATH_RESULTS_CKJM
+mv full_results.txt $PATH_RESULTS_CKJM

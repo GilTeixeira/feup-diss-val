@@ -37,7 +37,7 @@ papa.parse(file, {
 	// Sort Map
     	var mapAsc = new Map([...mapMetric.entries()].sort());
     	
-    	var timesStr = "";
+    	var timesStr = "metric;time";
     	console.log("Metric = time in micrseconds (10^-6)\n");
         for (let [key, value] of mapAsc.entries()) {
 	        timesStr+=key + ';' + value + '\n';
