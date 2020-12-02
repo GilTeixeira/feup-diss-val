@@ -1,0 +1,14 @@
+{
+  "name": "parser",
+  "version": "1.0.0",
+  "description": "parser for sonarqube results",
+  "main": "parse.js",
+  "scripts": {
+    "start": "node sonarqube-parser.js $TOOL"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^2.6.1"
+  }
+}
