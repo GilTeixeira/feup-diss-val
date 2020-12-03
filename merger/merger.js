@@ -31,12 +31,19 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
 				step: function (result) {
 					metrics.add(result.data.metric);
 					files.push(result.data.file);
-					results.set(result.data.file, [
-						{
-							tool: "lara",
-							metric: result.data.metric,
-							result: result.data.result
-						}
+
+					let resTool = {
+						tool: "lara",
+						metric: result.data.metric,
+						result: result.data.result
+					};
+					if(results.has(result.data.file))
+						results.set(
+							results.get(result.data.file).push(resTool)
+						);
+
+					else results.set(result.data.file, [
+						resTool
 					]);
 				}
 			});
@@ -102,8 +109,8 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
   let resultsStr = "files;";
 
   //Header
-  for(tool of tools)
-    for(metric of metrics){
+  for(metric of metrics)
+    for(tool of tools){
       resultsStr+=tool+"-"+metric+";";
       console.log(tool + "  " + metric);
     }
@@ -114,8 +121,8 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
   results.forEach((value, key) => {
       if(value===undefined) return;
       let line = key+";";
-      for(tool of tools)
-        for(metric of metrics){
+      for(metric of metrics)
+        for(tool of tools){
           let res = value.filter(res=> res.tool===tool && res.metric===metric);
           if(res.length===0)
             line+="-";
