@@ -19,6 +19,7 @@ var mapMetric = new Map();
 console.log(PATH_RESULTS_FILE);
 console.log(PATH_RESULTS_TIME);
 
+var classes = new Set();
 
 papa.parse(file, {
     header: true,
@@ -32,6 +33,10 @@ papa.parse(file, {
         var accumResult = result.data.time + currVal;
         mapMetric.set(result.data.metric, accumResult);
         console.log(result);
+       
+        var output = result.data.class.split(/::/).pop();
+        classes.add(output)
+
     },
     complete: function(results, file) {
 	// Sort Map
@@ -51,6 +56,9 @@ papa.parse(file, {
         fs.writeFile(PATH_RESULTS_TIME, timesStr, function (err) {
             if (err) throw err;
             console.log('Updated!');
-          }); 
+          });
+
+          console.log(new Array(...classes).join('\n '));
+          console.log(classes.size);
     }
 });

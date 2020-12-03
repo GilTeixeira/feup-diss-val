@@ -4,7 +4,7 @@
   "description": "parser for sonarqube results",
   "main": "parse.js",
   "scripts": {
-    "start": "node sonarqube-parser.js $TOOL"
+    "start": "node sonarqube-parser.js $PATH_RESULTS_SONAR $SONAR_URL $PROJECT_ID"
   },
   "author": "",
   "license": "ISC",

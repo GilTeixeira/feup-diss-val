@@ -1,10 +1,10 @@
 {
   "name": "parser",
   "version": "1.0.0",
-  "description": "parser for analizo results",
-  "main": "parse.js",
+  "description": "merger for all results",
+  "main": "merger.js",
   "scripts": {
-    "start": "node parse.js $RES_PATH"
+    "start": "node merger.js $RES_PATH"
   },
   "author": "",
   "license": "ISC",
