@@ -4,7 +4,8 @@
   "description": "merger for all results",
   "main": "merger.js",
   "scripts": {
-    "start": "node merger.js $RES_PATH"
+    "merge_file_metrics": "node merger.js $RES_PATH",
+    "merge_class_metrics": "node merger_class.js $RES_PATH"
   },
   "author": "",
   "license": "ISC",

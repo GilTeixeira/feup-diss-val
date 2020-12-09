@@ -5,15 +5,15 @@ const util = require("util");
 const readdir = util.promisify(fs.readdir);
 
 const PATH_RESULTS = process.argv[2];
-const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
+const RESULTS_FILE = PATH_RESULTS + "/full_results.txt";
 
 (async function () {
 	let metrics = new Set();
-	let files = [];
+	let classes = [];
 	let tools = [];
 	let results = new Map();
 
-	const LARA_PATH = PATH_RESULTS + "/lara/file_results.txt";
+	const LARA_PATH = PATH_RESULTS + "/lara/full_results.txt";
 	const LARA_FILE = fs.createReadStream(LARA_PATH);
 
 	await (function () {
@@ -30,18 +30,18 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
 				},
 				step: function (result) {
 					metrics.add(result.data.metric);
-					files.push(result.data.file);
+					classes.push(result.data.class);
 
 					let resTool = {
 						tool: "lara",
 						metric: result.data.metric,
 						result: result.data.result
 					};
-					if (results.has(result.data.file))
+					if (results.has(result.data.class))
 						results.set(
-							results.get(result.data.file).push(resTool)
+							results.get(result.data.class).push(resTool)
 						);
-					else results.set(result.data.file, [resTool]);
+					else results.set(result.data.class, [resTool]);
 				}
 			});
 		});
@@ -55,7 +55,7 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
 			for (let dir of dirs) {
 				// Make one pass and make the file complete
 				let dirPath = path.join(PATH_RESULTS, dir);
-				let filePath = path.join(dirPath, "file_results.txt");
+				let filePath = path.join(dirPath, "full_results.txt");
 
 				// Skip if doesnt exist file
 				if (!fs.existsSync(filePath)) continue;
@@ -78,7 +78,7 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
 								reject(error);
 							},
 							step: function (result) {
-								if (!results.has(result.data.file)) return;
+								if (!results.has(result.data.class)) return;
 
 								let resTool = {
 									tool: dir,
@@ -87,7 +87,7 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
 								};
 
 								results.set(
-									results.get(result.data.file).push(resTool)
+									results.get(result.data.class).push(resTool)
 								);
 							}
 						});
@@ -102,7 +102,7 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.txt";
 	console.log(results);
 	console.log("END");
 
-	let resultsStr = "files;";
+	let resultsStr = "classes;";
 
 	//Header
 	for (metric of metrics)
