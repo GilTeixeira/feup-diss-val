@@ -3,3 +3,5 @@ ckjm
 lara
 *.txt
 old-results
+test/Sorting
+test/simdjson
