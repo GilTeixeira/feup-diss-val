@@ -5,3 +5,5 @@ lara
 old-results
 test/Sorting
 test/simdjson
+test/js-simple/.scannerwork/.sonar_lock
+test/cpp/.scannerwork/.sonar_lock

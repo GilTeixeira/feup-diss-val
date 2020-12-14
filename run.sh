@@ -22,13 +22,15 @@ SONAR_URL="http://localhost:9000"
 #PATH_TO_PROJECT_CLASSES_FILES=$(pwd)/test/java/build/classes/java/main/store/*.class
 
 
-#PROJECT_ID="elasticsearch" 
+PROJECT_ID="elasticsearch" 
+PROJECT_ID="testElasticSearch" 
+
 PROJECT_ID="axios" 
 
 LANGUAGE="java"
-PATH_TO_PROJECT_FOLDER=$(pwd)/test/simdjson
-#PATH_TO_PROJECT_FOLDER=$(pwd)/test/elasticsearch/buildSrc
-PATH_TO_PROJECT_CLASSES_FILES=$(pwd)/test/elasticsearch/buildSrc/build-bootstrap/classes/java/main/org/elasticsearch/gradle/*.class
+#PATH_TO_PROJECT_FOLDER=$(pwd)/test/simdjson
+PATH_TO_PROJECT_FOLDER=$(pwd)/test/elasticsearch/buildSrc
+#PATH_TO_PROJECT_CLASSES_FILES=$(pwd)/test/elasticsearch/buildSrc/build-bootstrap/classes/java/main/org/elasticsearch/gradle/*.class
 
 
 
@@ -91,12 +93,15 @@ PATH_RESULTS_SONAR=${PATH_RESULTS_SONAR} SONAR_URL=${SONAR_URL} PROJECT_ID=${PRO
 #cp /home/gildt/Desktop/LARA/kadabra/JavaWeaver/run/file_results.txt ${PATH_RESULTS_LARA}
 #cp /home/gildt/Desktop/LARA/kadabra/JavaWeaver/run/file_results.txt ${PATH_RESULTS_LARA}
 
-cp /home/gildt/Desktop/LARA/jsweaver/jsweaver/file_results.txt ${PATH_RESULTS_LARA}
-cp /home/gildt/Desktop/LARA/jsweaver/jsweaver/full_results.txt ${PATH_RESULTS_LARA}
+cp /home/gildt/Desktop/LARA/jsweaver/jsweaver/file_results.csv ${PATH_RESULTS_LARA}
+cp /home/gildt/Desktop/LARA/jsweaver/jsweaver/function_results.csv ${PATH_RESULTS_LARA}
+cp /home/gildt/Desktop/LARA/jsweaver/jsweaver/file_results.csv ${PATH_RESULTS_LARA}
+cp /home/gildt/Desktop/LARA/jsweaver/jsweaver/project_results.csv ${PATH_RESULTS_LARA}
 
 
 
 # ## Merge results
 
 RES_PATH=$(pwd)/results/$TIMESTAMP npm run merge_file_metrics --prefix ./merger/
+RES_PATH=$(pwd)/results/$TIMESTAMP npm run merge_project_metrics --prefix ./merger/
 # RES_PATH=$(pwd)/results/$TIMESTAMP npm run merge_class_metrics --prefix ./merger/
