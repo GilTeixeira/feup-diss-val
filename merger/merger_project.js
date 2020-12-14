@@ -5,15 +5,14 @@ const util = require("util");
 const readdir = util.promisify(fs.readdir);
 
 const PATH_RESULTS = process.argv[2];
-const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
+const RESULTS_FILE = PATH_RESULTS + "/project_results.csv";
 
 (async function () {
 	let metrics = new Set();
-	let files = [];
 	let tools = [];
-	let results = new Map();
+	let results = [];
 
-	const LARA_PATH = PATH_RESULTS + "/lara/file_results.csv";
+	const LARA_PATH = PATH_RESULTS + "/lara/project_results.csv";
 	const LARA_FILE = fs.createReadStream(LARA_PATH);
 
 	await (function () {
@@ -29,19 +28,16 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 					reject(error);
 				},
 				step: function (result) {
+					console.log(result);
 					metrics.add(result.data.metric);
-					files.push(result.data.id);
 
 					let resTool = {
 						tool: "lara",
 						metric: result.data.metric,
 						value: result.data.value
 					};
-					if (results.has(result.data.id))
-						results.set(
-							results.get(result.data.id).push(resTool)
-						);
-					else results.set(result.data.id, [resTool]);
+
+					results.push(resTool);
 				}
 			});
 		});
@@ -55,7 +51,7 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 			for (let dir of dirs) {
 				// Make one pass and make the file complete
 				let dirPath = path.join(PATH_RESULTS, dir);
-				let filePath = path.join(dirPath, "file_results.csv");
+				let filePath = path.join(dirPath, "project_results.csv");
 
 				// Skip if doesnt exist file
 				if (!fs.existsSync(filePath)) continue;
@@ -78,17 +74,14 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 								reject(error);
 							},
 							step: function (result) {
-								if (!results.has(result.data.id)) return;
-
+								console.log(result);
 								let resTool = {
 									tool: dir,
 									metric: result.data.metric,
 									value: result.data.value
 								};
 
-								results.set(
-									results.get(result.data.id).push(resTool)
-								);
+								results.push(resTool);
 							}
 						});
 					});
@@ -102,7 +95,7 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 	console.log(results);
 	console.log("END");
 
-	let resultsStr = "files;";
+	let resultsStr = "";
 
 	//Header
 	console.log("tools:  " + tools);
@@ -116,22 +109,22 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 	resultsStr += "\n";
 
 	//Body
-	results.forEach((value, key) => {
-		if (value === undefined) return;
-		let line = key + ";";
-		for (metric of metrics)
-			for (tool of tools) {
-				let res = value.filter(
-					(res) => res.tool === tool && res.metric === metric
-				);
-				if (res.length === 0) line += "-";
-				else line += res[0].value;
-				line += ";";
-			}
-		line += "\n";
-		resultsStr += line;
-		//console.log(value, key)
-	});
+
+	//console.log(results);
+	
+	let line = "";
+	for (metric of metrics)
+		for (tool of tools) {
+			let res = results.filter(
+				(res) => res.tool === tool && res.metric === metric
+			);
+			if (res.length === 0) line += "-";
+			else line += res[0].value;
+			line += ";";
+		}
+	line += "\n";
+	resultsStr += line;
+	//console.log(value, key)
 
 	console.log(RESULTS_FILE);
 	fs.writeFile(RESULTS_FILE, resultsStr, function (err) {

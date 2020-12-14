@@ -5,7 +5,8 @@
   "main": "merger.js",
   "scripts": {
     "merge_file_metrics": "node merger.js $RES_PATH",
-    "merge_class_metrics": "node merger_class.js $RES_PATH"
+    "merge_class_metrics": "node merger_class.js $RES_PATH",
+    "merge_project_metrics": "node merger_project.js $RES_PATH"
   },
   "author": "",
   "license": "ISC",
