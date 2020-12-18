@@ -1,25 +1,3 @@
-/*
-#pragma once
-
-#include <iostream>
-#include <string>
-#include <map>
-#include <algorithm>
-
-
-#include "defs.h"
-#include "Data.h"
-#include "Cliente.h"
-#include "Produto.h"
-#include "Transacao.h"
-//#include "Recomendacoes.h"
-
-
-#include "utils.h"
-
-
-using namespace std;
-*/
 #include <iostream>
 #include <string>
 #include "Date.h"
@@ -61,4 +39,3 @@ class Store{
   //friend int escolher_cliente(const VendeMaisMais &supermercado);
   //friend pair<int, string>  escolher_cliente2(const VendeMaisMais &supermercado);
 };
-

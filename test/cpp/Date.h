@@ -24,5 +24,3 @@ class Date {
   bool operator == (const Date &)const;
   string toString();
 };
-
-

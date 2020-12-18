@@ -22,4 +22,3 @@ class Transaction {
   string toString();
   //friend ostream& operator<<(ostream& out, const Transaction & trans); // show transaction
 };
-

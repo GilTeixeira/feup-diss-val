@@ -7,3 +7,5 @@ test/Sorting
 test/simdjson
 test/js-simple/.scannerwork/.sonar_lock
 test/cpp/.scannerwork/.sonar_lock
+test/sonar-cxx-cxx-1.3.3/
+test/CantMeasure
