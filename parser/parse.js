@@ -6,8 +6,8 @@ const PATH_RESULTS =  process.argv[2];
 
 //$console.log(process.argv[2]);
 
-const RESULTS_FILE = 'full_results.txt';
-const RESULTS_TIME = 'time_results.txt';
+const RESULTS_FILE = 'class_results.csv';
+const RESULTS_TIME = 'class_time_results.csv';
 
 const PATH_RESULTS_FILE = PATH_RESULTS + RESULTS_FILE;
 const PATH_RESULTS_TIME = PATH_RESULTS + RESULTS_TIME;
@@ -32,9 +32,9 @@ papa.parse(file, {
 
         var accumResult = result.data.time + currVal;
         mapMetric.set(result.data.metric, accumResult);
-        console.log(result);
+        //console.log(result);
        
-        var output = result.data.class.split(/::/).pop();
+        var output = result.data.id.split(/::/).pop();
         classes.add(output)
 
     },
@@ -43,7 +43,7 @@ papa.parse(file, {
     	var mapAsc = new Map([...mapMetric.entries()].sort());
     	
     	var timesStr = "metric;time\n";
-    	console.log("Metric = time in micrseconds (10^-6)\n");
+    	//console.log("Metric = time in micrseconds (10^-6)\n");
         for (let [key, value] of mapAsc.entries()) {
 	        timesStr+=key + ';' + value + '\n';
             //console.log(key + ' = ' + value);
@@ -55,10 +55,10 @@ papa.parse(file, {
           }
         fs.writeFile(PATH_RESULTS_TIME, timesStr, function (err) {
             if (err) throw err;
-            console.log('Updated!');
+            console.log('write time file!');
           });
 
-          console.log(new Array(...classes).join('\n '));
-          console.log(classes.size);
+          //console.log(new Array(...classes).join('\n '));
+          //console.log(classes.size);
     }
 });
