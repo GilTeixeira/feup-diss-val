@@ -1,0 +1,21 @@
+> Task :compileJava
+> Task :processResources NO-SOURCE
+> Task :classes
+> Task :compileTestJava NO-SOURCE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+> Task :test NO-SOURCE
+
+> Task :sonarqube
+Bytecode of dependencies was not provided for analysis of source files, you might end up with less precise results. Bytecode can be provided using sonar.java.libraries property.
+Missing blame information for the following files:
+  * src/main/java/store/Date.java
+  * src/main/java/store/Transaction.java
+  * src/main/java/store/Client.java
+  * src/main/java/store/Store.java
+  * src/main/java/store/Person.java
+  * src/main/java/store/Product.java
+This may lead to missing/broken features in SonarQube
+
+BUILD SUCCESSFUL in 4s
+2 actionable tasks: 2 executed
