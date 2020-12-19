@@ -5,7 +5,9 @@ const util = require("util");
 const readdir = util.promisify(fs.readdir);
 
 const PATH_RESULTS = process.argv[2];
-const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
+const FILE_TO_MERGE = process.argv[3];
+//FILE_TO_MERGE = "file_results.csv"; 
+const RESULTS_FILE = PATH_RESULTS + "/"+FILE_TO_MERGE;
 
 (async function () {
 	let metrics = new Set();
@@ -13,7 +15,7 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 	let tools = [];
 	let results = new Map();
 
-	const LARA_PATH = PATH_RESULTS + "/lara/file_results.csv";
+	const LARA_PATH = PATH_RESULTS + "/lara/"+FILE_TO_MERGE;
 	const LARA_FILE = fs.createReadStream(LARA_PATH);
 
 	await (function () {
@@ -50,12 +52,12 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 	await (function () {
 		return new Promise(async (resolve, reject) => {
 			let dirs = await readdir(PATH_RESULTS);
-			console.log(dirs);
+			//console.log(dirs);
 
 			for (let dir of dirs) {
 				// Make one pass and make the file complete
 				let dirPath = path.join(PATH_RESULTS, dir);
-				let filePath = path.join(dirPath, "file_results.csv");
+				let filePath = path.join(dirPath, FILE_TO_MERGE);
 
 				// Skip if doesnt exist file
 				if (!fs.existsSync(filePath)) continue;
@@ -99,18 +101,18 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 		});
 	})();
 
-	console.log(results);
-	console.log("END");
+	//console.log(results);
+	//console.log("END");
 
 	let resultsStr = "files;";
 
 	//Header
-	console.log("tools:  " + tools);
-	console.log("metrics:  " + metrics);
+	//console.log("tools:  " + tools);
+	//console.log("metrics:  " + metrics);
 	for (metric of metrics)
 		for (tool of tools) {
 			resultsStr += tool + "-" + metric + ";";
-			console.log(tool + "  " + metric);
+			//console.log(tool + "  " + metric);
 		}
 
 	resultsStr += "\n";
@@ -133,7 +135,7 @@ const RESULTS_FILE = PATH_RESULTS + "/file_results.csv";
 		//console.log(value, key)
 	});
 
-	console.log(RESULTS_FILE);
+	//console.log(RESULTS_FILE);
 	fs.writeFile(RESULTS_FILE, resultsStr, function (err) {
 		if (err) throw err;
 		console.log("Updated!");

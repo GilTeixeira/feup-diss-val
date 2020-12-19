@@ -28,7 +28,7 @@ const RESULTS_FILE = PATH_RESULTS + "/project_results.csv";
 					reject(error);
 				},
 				step: function (result) {
-					console.log(result);
+					//console.log(result);
 					metrics.add(result.data.metric);
 
 					let resTool = {
@@ -74,7 +74,7 @@ const RESULTS_FILE = PATH_RESULTS + "/project_results.csv";
 								reject(error);
 							},
 							step: function (result) {
-								console.log(result);
+								//console.log(result);
 								let resTool = {
 									tool: dir,
 									metric: result.data.metric,
@@ -92,18 +92,18 @@ const RESULTS_FILE = PATH_RESULTS + "/project_results.csv";
 		});
 	})();
 
-	console.log(results);
-	console.log("END");
+	//console.log(results);
+	//console.log("END");
 
 	let resultsStr = "";
 
 	//Header
-	console.log("tools:  " + tools);
-	console.log("metrics:  " + metrics);
+	//console.log("tools:  " + tools);
+	//console.log("metrics:  " + metrics);
 	for (metric of metrics)
 		for (tool of tools) {
 			resultsStr += tool + "-" + metric + ";";
-			console.log(tool + "  " + metric);
+			//console.log(tool + "  " + metric);
 		}
 
 	resultsStr += "\n";
@@ -126,7 +126,7 @@ const RESULTS_FILE = PATH_RESULTS + "/project_results.csv";
 	resultsStr += line;
 	//console.log(value, key)
 
-	console.log(RESULTS_FILE);
+	//console.log(RESULTS_FILE);
 	fs.writeFile(RESULTS_FILE, resultsStr, function (err) {
 		if (err) throw err;
 		console.log("Updated!");
