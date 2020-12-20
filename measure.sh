@@ -28,6 +28,10 @@ mkdir results/$RESULTS_FOLDER
 
 ## Calculate Metrics
 
+## Time per Tool
+TOOLS_TIME_FILE=$(pwd)/results/$RESULTS_FOLDER/tool_times.csv
+echo "tool;time" > $TOOLS_TIME_FILE
+
 ### Run analizo
 
 if [ $LANG_PROJECT == 'java' ] || [ $LANG_PROJECT == 'c' ] || [ $LANG_PROJECT == 'cpp' ]
@@ -36,7 +40,7 @@ then
 
     mkdir results/$RESULTS_FOLDER/analizo
     cd analizo
-    sh run.sh ${PROJECT_PATH} ../results/$RESULTS_FOLDER/analizo/
+    sh run.sh ${PROJECT_PATH} ../results/$RESULTS_FOLDER/analizo/ $TOOLS_TIME_FILE
     cd ..
 fi
 
@@ -47,13 +51,22 @@ mkdir results/$RESULTS_FOLDER/sonarqube
 PATH_RESULTS_SONAR=$(pwd)/results/$RESULTS_FOLDER/sonarqube/
 PATH_RESULTS_SONAR=${PATH_RESULTS_SONAR} SONAR_URL=${SONAR_URL} PROJECT_ID=${SONAR_ID} npm start --prefix ./sonarqube-parser/
 
+#### Write time to file
+SONAR_TIME_STR=$(grep 'Total time:\|BUILD SUCCESSFUL in ' $PROJECT_PATH/sonar.txt | sed 's/^.*: //'  | grep -Eo '[+-]?[0-9]+([.][0-9]+)?')
+SONAR_TIME=$(awk '{printf "%f", $1 * 1000 * 1000 * 1000}' <<<"${SONAR_TIME_STR}")
+echo "sonarqube;$SONAR_TIME">>$TOOLS_TIME_FILE
+
 
 ### Run CKJM
 if [ $LANG_PROJECT == 'java' ] 
 then
    mkdir results/$RESULTS_FOLDER/ckjm
    PATH_RESULTS_CKJM=$(pwd)/results/$RESULTS_FOLDER/ckjm/
+
+   start=`date +%s%N`
    find ${PROJECT_PATH} -name '*.class' -print | java -jar ./ckjm/build/ckjm-1.9.jar
+   end=`date +%s%N`
+   echo "ckjm;`expr $end - $start`">>$TOOLS_TIME_FILE
    mv class_results.csv $PATH_RESULTS_CKJM
    mv time_results_per_class.csv $PATH_RESULTS_CKJM
 fi
@@ -69,18 +82,31 @@ then
 # # # #clava $PATH_TO_LARA_METRICS_INTERFACE -p $PATH_TO_PROJECT_FOLDER -ncg -cl -o $PATH_RESULTS_LARA -thd 4 -s -nci -pi -of woven
 # # # java -jar ./lara/clava/Clava.jar $PATH_TO_LARA_METRICS_INTERFACE -p $PATH_TO_PROJECT_FOLDER -ncg -cl -o $PATH_RESULTS_LARA -thd 4 -s -nci -pi -of woven
    echo "Running Clava"
+
+   start=`date +%s%N`
    java -jar ./lara/clava/Clava.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -ncg -cl -o $PATH_RESULTS_LARA -thd 4 -s -nci -pi -of woven
+   end=`date +%s%N`
+   echo "lara;`expr $end - $start`">>$TOOLS_TIME_FILE
+   
 fi
 
 if [ $LANG_PROJECT == 'java' ] 
 then
+   start=`date +%s%N`
+   java -jar ./lara/kadabra/kadabra.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -WC -o $PATH_RESULTS_LARA -s -X
+   end=`date +%s%N`
+   echo "lara;`expr $end - $start`">>$TOOLS_TIME_FILE
 
-java -jar ./lara/kadabra/kadabra.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -WC -o $PATH_RESULTS_LARA -s -X
 fi
 
 if [ $LANG_PROJECT == 'javascript' ] 
 then
    echo "Running Jackdaw"
+   start=`date +%s%N`
+   #java -jar ./lara/kadabra/kadabra.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -WC -o $PATH_RESULTS_LARA -s -X
+   end=`date +%s%N`
+   echo "lara;`expr $end - $start`">>$TOOLS_TIME_FILE
+   
 fi
 
 RES_PATH=$PATH_RESULTS_LARA npm start --prefix ./parser/
