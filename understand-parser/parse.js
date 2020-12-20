@@ -7,6 +7,7 @@ const PATH_UNDERSTAND_RESULTS = process.argv[3];
 
 const RESULTS_UNDERSTAND_FILE = PATH_PROJECT + "/understand.csv";
 const RESULTS_CLASS_FILE = PATH_UNDERSTAND_RESULTS + "/class_results.csv";
+const RESULTS_FILE_FILE = PATH_UNDERSTAND_RESULTS + "/file_results.csv";
 //const RESULTS_CLASS_FILE = "class_results_u.csv";
 
 console.log(RESULTS_UNDERSTAND_FILE);
@@ -35,6 +36,7 @@ metricMapper.set("SumCyclomatic", "CK-WMC");
 //console.log(PATH_RESULTS_TIME);
 
 var classResultsStr = "id;metric;value;time\n";
+var fileResultsStr = "id;metric;value;time\n";
 
 papa.parse(file, {
 	header: true,
@@ -53,13 +55,40 @@ papa.parse(file, {
 						_id + ";" + _metric + ";" + _value + ";" + _time + "\n";
 				}
 			}
+        }
+        
+        if (result.data.Kind === "File") {
+			for (const [metric, value] of Object.entries(result.data)) {
+				if (metricMapper.has(metric) && value !== null) {
+                    let _id = result.data.Name;
+                    // Replace back slash (\) with forward slash (/)
+                    _id =_id.replace(/\\/g, "/");
+
+                    // Remove first folder in string
+                    if(_id.indexOf('/')>=0)
+                        _id=_id.substring(_id.indexOf('/') + 1)
+
+					const _metric = metricMapper.get(metric);
+					const _value = value;
+                    const _time = "-";
+                    //console.log(_id);
+					//classResults.push(_id+";"+_metric+";"+_value+";"+_time+"\n");
+					fileResultsStr +=
+						_id + ";" + _metric + ";" + _value + ";" + _time + "\n";
+				}
+			}
 		}
 	},
 	complete: function (results, file) {
 
 		fs.writeFile(RESULTS_CLASS_FILE, classResultsStr, function (err) {
 			if (err) throw err;
-			console.log("write Understand results!");
+			console.log("write Understand class results!");
+        });
+        
+        fs.writeFile(RESULTS_FILE_FILE, fileResultsStr, function (err) {
+			if (err) throw err;
+			console.log("write Understand file results!");
 		});
 
 	}
