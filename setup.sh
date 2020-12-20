@@ -45,3 +45,8 @@ mkdir -p test
 git clone https://github.com/GilTeixeira/elasticsearch
 mv elasticsearch test
 gradle wrapper -p test/elasticsearch/buildSrc/
+
+#git clone https://github.com/GilTeixeira/axios
+#git clone https://github.com/GilTeixeira/libphonenumber
+#git clone https://github.com/GilTeixeira/json
+#git clone https://github.com/GilTeixeira/gson
