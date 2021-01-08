@@ -43,7 +43,7 @@ papa.parse(file, {
 	dynamicTyping: true,
 	worker: true, // Don't bog down the main thread if its a big file
 	step: function (result) {
-		if (result.data.Kind === "Class") {
+		if (result.data.Kind.includes("Class")) {
 			for (const [metric, value] of Object.entries(result.data)) {
 				if (metricMapper.has(metric) && value !== null) {
 					const _id = result.data.Name;
