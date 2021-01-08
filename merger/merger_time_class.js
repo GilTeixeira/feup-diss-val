@@ -7,7 +7,7 @@ const readdir = util.promisify(fs.readdir);
 const PATH_RESULTS = process.argv[2];
 const FILE_TO_MERGE = process.argv[3];
 //FILE_TO_MERGE = "file_results.csv"; 
-const RESULTS_FILE = PATH_RESULTS + "/"+FILE_TO_MERGE;
+const RESULTS_FILE = PATH_RESULTS + "/class_time_results.csv";
 
 (async function () {
 	let metrics = new Set();
@@ -37,7 +37,7 @@ const RESULTS_FILE = PATH_RESULTS + "/"+FILE_TO_MERGE;
 					let resTool = {
 						tool: "lara",
 						metric: result.data.metric,
-						value: result.data.value
+						value: result.data.time
 					};
 
 					var idRes = result.data.id.replace(/\$/g, '.');
@@ -56,6 +56,8 @@ const RESULTS_FILE = PATH_RESULTS + "/"+FILE_TO_MERGE;
 			let dirs = await readdir(PATH_RESULTS);
 			//console.log(dirs);
 
+			tools.push("lara");
+
 			for (let dir of dirs) {
 				// Make one pass and make the file complete
 				let dirPath = path.join(PATH_RESULTS, dir);
@@ -64,10 +66,12 @@ const RESULTS_FILE = PATH_RESULTS + "/"+FILE_TO_MERGE;
 				// Skip if doesnt exist file
 				if (!fs.existsSync(filePath)) continue;
 
-				tools.push(dir);
+				
 
-				// Skip lara
-				if (dir === "lara") continue;
+				// Only analizo
+				if (dir !== "analizo") continue;
+
+				tools.push(dir);
 
 				await (function () {
 					return new Promise((resolve, reject) => {
@@ -88,7 +92,7 @@ const RESULTS_FILE = PATH_RESULTS + "/"+FILE_TO_MERGE;
 								let resTool = {
 									tool: dir,
 									metric: result.data.metric,
-									value: result.data.value
+									value: result.data.time
 								};
 
 								results.set(
@@ -107,7 +111,7 @@ const RESULTS_FILE = PATH_RESULTS + "/"+FILE_TO_MERGE;
 	//console.log(results);
 	//console.log("END");
 
-	let resultsStr = "files;";
+	let resultsStr = "ids;";
 
 	//Header
 	//console.log("tools:  " + tools);
