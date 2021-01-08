@@ -2,11 +2,17 @@
 
 ## Parse Arguments
 
-while getopts p:l:s: opts; do
+JARS_PATH=""
+COMPLETE_CLASSPATH=""
+
+while getopts p:l:s:j:x opts; do
    case ${opts} in
       p) PROJECT_PATH=${OPTARG} ;;
       l) LANG_PROJECT=${OPTARG} ;;
       s) SONAR_ID=${OPTARG} ;;
+      j) JARS_PATH="-I ${OPTARG}" ;;
+      x) COMPLETE_CLASSPATH="-X" ;;
+
    esac
 done
 
@@ -84,7 +90,7 @@ then
    echo "Running Clava"
 
    start=`date +%s%N`
-   java -jar ./lara/clava/Clava.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -ncg -cl -o $PATH_RESULTS_LARA -thd 4 -s -nci -pi -of woven
+   java -jar ./lara/clava/Clava.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -ncg -cl -o $PATH_RESULTS_LARA -thd 4 -s -nci -pi -of woven -e $PATH_RESULTS_LARA/metrics.json
    end=`date +%s%N`
    echo "lara;`expr $end - $start`">>$TOOLS_TIME_FILE
    
@@ -92,8 +98,11 @@ fi
 
 if [ $LANG_PROJECT == 'java' ] 
 then
-   start=`date +%s%N`
-   java -jar ./lara/kadabra/kadabra.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -WC -o $PATH_RESULTS_LARA -s -X
+   OPTIONAL_PARAMS="$JARS_PATH $COMPLETE_CLASSPATH"
+   #echo "$OPTIONAL_PARAMS"
+   #echo "java -jar ./lara/kadabra/kadabra.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -WC -o $PATH_RESULTS_LARA -s $OPTIONAL_PARAMS"
+   start=`date +%s%N`   
+   java -jar ./lara/kadabra/kadabra.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -WC -o $PATH_RESULTS_LARA -s $OPTIONAL_PARAMS -e $PATH_RESULTS_LARA/metrics.json
    end=`date +%s%N`
    echo "lara;`expr $end - $start`">>$TOOLS_TIME_FILE
 
@@ -103,7 +112,7 @@ if [ $LANG_PROJECT == 'javascript' ]
 then
    echo "Running Jackdaw"
    start=`date +%s%N`
-   #java -jar ./lara/kadabra/kadabra.jar  $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -WC -o $PATH_RESULTS_LARA -s -X
+   java -jar lara/jackdaw/jackdaw.jar $PATH_TO_LARA_METRICS_INTERFACE -p $PROJECT_PATH -o $PATH_RESULTS_LARA -s -e $PATH_RESULTS_LARA/metrics.json
    end=`date +%s%N`
    echo "lara;`expr $end - $start`">>$TOOLS_TIME_FILE
    
@@ -136,6 +145,7 @@ PROJ_PATH=$PROJECT_PATH RES_PATH=$PATH_RESULTS_UNDERSTAND npm start --prefix ./u
 RES_PATH=$(pwd)/results/$RESULTS_FOLDER FILE_TO_MERGE=file_results.csv npm run merge_metrics --prefix ./merger/
 RES_PATH=$(pwd)/results/$RESULTS_FOLDER FILE_TO_MERGE=class_results.csv npm run merge_metrics --prefix ./merger/
 RES_PATH=$(pwd)/results/$RESULTS_FOLDER FILE_TO_MERGE=function_results.csv npm run merge_metrics --prefix ./merger/
+RES_PATH=$(pwd)/results/$RESULTS_FOLDER FILE_TO_MERGE=class_results.csv npm run merge_time_class_metrics --prefix ./merger/
 #RES_PATH=$(pwd)/results/$RESULTS_FOLDER npm run merge_file_metrics --prefix ./merger/
 RES_PATH=$(pwd)/results/$RESULTS_FOLDER npm run merge_project_metrics --prefix ./merger/
 
