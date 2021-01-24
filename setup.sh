@@ -3,7 +3,11 @@
 
 ## Setup parsers
 npm install --prefix sonarqube-parser/
+npm install --prefix understand-parser/
 npm install --prefix parser/
+
+## Setup merger
+npm install --prefix merger/
 
 # ## Setup Analizo
 git clone https://github.com/GilTeixeira/analizo
@@ -27,12 +31,16 @@ unzip lara/clava/clava.zip -d lara/clava/
 rm lara/clava/clava.zip
 
 # ## Setup LARA-kadabra
-mkdir lara
+mkdir lara/kadabra
+wget http://specs.fe.up.pt/tools/jackdaw.zip-P ./lara/jackdaw
+unzip lara/jackdaw/jackdaw.zip -d lara/jackdaw/
+rm lara/jackdaw/jackdaw.zip
+
+# ## Setup LARA-jackdaw
 mkdir lara/kadabra
 wget http://specs.fe.up.pt/tools/kadabra.zip -P ./lara/kadabra
 unzip lara/kadabra/kadabra.zip -d lara/kadabra/
 rm lara/kadabra/kadabra.zip
-
 
 ## Setup LARA-Metrics
 git clone https://github.com/GilTeixeira/feup-diss
