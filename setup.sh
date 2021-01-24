@@ -52,7 +52,27 @@ git clone https://github.com/GilTeixeira/axios
 git clone https://github.com/GilTeixeira/libphonenumber
 git clone https://github.com/GilTeixeira/json
 git clone https://github.com/GilTeixeira/gson
+git clone https://github.com/GilTeixeira/elasticsearch
 cd ..
+
+## Compile Java projects
+cd test
+
+cd store-Java
+./gradlew build
+cd ..
+
+cd libphonenumber/java
+ant
+cd ../..
+
+cd elasticsearch/buildSrc
+./gradlew build
+cd ../..
+
+
+
+
 
 ### Setup elasticsearch
 mkdir -p test
